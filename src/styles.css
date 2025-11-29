@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* COLORS */
+:root {
+  --bg: #E6F0FF;
+  --text: #0F2B46;
+  --accent: #7CC6B1;
+  --peach: #F6E6DD;
+  --card: rgba(255, 255, 255, 0.95);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* CARD (HERO + SECTIONS) */
+.card {
+  background: var(--card);
+  border-radius: 23px;
+  box-shadow: 0 6px 18px rgba(12, 20, 30, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 45px rgba(12, 20, 30, 0.18);
+}
+
+/* BACKGROUND — CIRCUIT PATTERN */
+.bg-tech {
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>\
+    <g fill='none' stroke='%230F2B46' stroke-opacity='0.06'>\
+      <circle cx='60' cy='60' r='4' fill='%230F2B46' fill-opacity='0.04'/>\
+      <circle cx='250' cy='140' r='4' fill='%230F2B46' fill-opacity='0.04'/>\
+      <circle cx='420' cy='70' r='4' fill='%230F2B46' fill-opacity='0.04'/>\
+      <circle cx='600' cy='200' r='4' fill='%230F2B46' fill-opacity='0.04'/>\
+      <path d='M64 60 L246 140 L416 74 L596 200'/>\
+      <path d='M246 140 L320 350'/>\
+    </g>\
+  </svg>");
+  background-size: 420px 320px;
+  background-repeat: repeat;
+}
+
+/* SOFT BLOBS OVERLAY */
+.bg-blobs::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(124,198,177,0.14), transparent 12%),
+    radial-gradient(circle at 80% 40%, rgba(246,230,221,0.12), transparent 12%),
+    radial-gradient(circle at 50% 80%, rgba(144,173,250,0.08), transparent 14%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+
