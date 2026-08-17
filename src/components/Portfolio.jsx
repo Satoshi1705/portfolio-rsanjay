@@ -1,227 +1,399 @@
-// src/components/Portfolio.jsx
-import React from "react";
+import React, { useEffect } from "react";
+import "./Portfolio.css";
 
 const projects = [
   {
-    id: 1,
-    title: "Locating Companion (SOS Safety App)",
-    desc: "A safety-focused SOS app using real-time tracking to monitor travel and vehicle stats with a strong focus on UI/UX.",
-    tech: ["Frontend", "GPS Tracking", "UI/UX"],
-    link: "#",
+    title: "TruPoint D2C Analytics Dashboard",
+    tags: "Figma / UX Research / Design Systems",
+    desc: "A full analytics dashboard for D2C businesses, built from research into real merchant workflows. 60+ responsive screens cover sales, customers, marketing, and operations, backed by a reusable component library.",
   },
   {
-    id: 2,
-    title: "Rain Detection System for Clothes Protection",
-    desc: "An IoT-based sensor system that detects rain and triggers an automated protective mechanism for drying clothes.",
-    tech: ["IoT", "Sensors", "Automation"],
-    link: "#",
+    title: "MERN Notes Application",
+    tags: "MongoDB / Express / React / Node",
+    desc: "A full-stack CRUD notes app with a clean, responsive React interface backed by RESTful APIs and MongoDB storage.",
   },
   {
-    id: 3,
-    title: "Food Inventory Automation Workflow",
-    desc: "A workflow built using n8n to track food expiry dates with Sheets, Gmail alerts, and AI-generated mail content using Gemini Flash 2.0.",
-    tech: ["n8n", "Google Sheets", "Gmail API", "Gemini Flash 2.0"],
-    link: "#",
+    title: "AI Food Inventory Automation",
+    tags: "n8n / Gemini Flash / Gmail API",
+    desc: "An AI-powered workflow that tracks inventory and expiry dates in Google Sheets, then generates and sends personalized alert emails using Gemini Flash.",
   },
 ];
 
 const skills = [
-  "Python",
-  "Java (Basics)",
-  "GitHub",
-  "Linux",
-  "UI/UX",
-  "Photoshop",
-  "Canva",
-  "Illustrator",
+  ["UX Process", "User research, user flows, wireframing, prototyping, usability considerations, information architecture"],
+  ["UI Design", "High-fidelity UI, responsive web design, design systems, reusable components, dashboard design"],
+  ["Design Tools", "Figma, Adobe Photoshop, Adobe Illustrator, Canva"],
+  ["Front-End", "React.js, HTML5, CSS3, JavaScript. Building and validating designs in-browser"],
+  ["Back-End & Tools", "Node.js, Express.js, MongoDB, RESTful APIs, Git/GitHub, Postman"],
+  ["AI & Automation", "n8n, Gemini API, prompt engineering, AI workflow automation"],
+];
+
+const experience = [
+  {
+    date: "Dec 2025 — 2026",
+    role: "UI/UX Design Intern",
+    org: "APR Hub Technologies",
+    points: [
+      "Conducted UX research and designed user-centered interfaces, translating merchant workflows into clear design requirements",
+      "Designed the TruPoint D2C Analytics Dashboard end-to-end. 60+ high-fidelity screens across analytics, customer, marketing, and operations",
+      "Built a reusable component library and design system in Figma",
+      "Partnered with developers and stakeholders to turn requirements into implementation-ready product experiences",
+    ],
+  },
+  {
+    date: "June 2025",
+    role: "UI/UX & Graphic Design Intern",
+    org: "Scorpleo Technologies",
+    points: [
+      "Designed branding materials, social creatives, posters, and marketing assets across Photoshop, Illustrator, and Canva",
+      "Maintained visual consistency across multiple client campaigns",
+    ],
+  },
+  {
+    date: "June 2026 — Present",
+    role: "Web App Development Intern",
+    org: "Skill Hive Innovations",
+    points: [
+      "Building and maintaining real-world web application projects, translating UI designs into functional, accessible interfaces",
+      "Collaborating with a development team on industry-standard software practices",
+    ],
+  },
+  {
+    date: "Aug 2024",
+    role: "Full Stack Development Intern",
+    org: "TechSnapie Solutions",
+    points: [
+      "Developed responsive web applications with RESTful APIs and database integration",
+      "Worked with Git across the full software development lifecycle",
+    ],
+  },
+];
+
+const education = [
+  "AWS Academy Graduate — Generative AI Foundations (Training Badge)",
+  "Complete Linux Training Course to Get Your Dream IT Job 2025 (Udemy)",
+  "Internship Certifications — TechSnapie Solutions, APR Hub Technologies, Scorpleo Technologies",
+  "Best Rotaractor of the Month — Rotaract Club of SNS College of Technology",
 ];
 
 export default function Portfolio() {
+  useEffect(() => {
+    const heroHeading = document.getElementById("heroHeading");
+    if (heroHeading) {
+      const words = heroHeading.textContent.trim().split(" ");
+      heroHeading.innerHTML = words
+        .map(
+          (word, i) =>
+            `<span class="word"><span style="animation-delay:${0.28 + i * 0.055}s">${word}</span></span>`
+        )
+        .join(" ");
+    }
+
+    document.querySelectorAll("main h2").forEach((heading) => {
+      heading.innerHTML = `<span class="h2-inner">${heading.innerHTML}</span>`;
+    });
+
+    const navLinks = document.querySelectorAll(".nav-list a");
+    const sections = document.querySelectorAll("main section");
+
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute("id");
+          const link = document.querySelector(`.nav-list a[href="#${id}"]`);
+          if (entry.isIntersecting) {
+            navLinks.forEach((item) => item.classList.remove("active"));
+            if (link) link.classList.add("active");
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sections.forEach((section) => spyObserver.observe(section));
+
+    const groups = [
+      document.querySelectorAll(".skill-card"),
+      document.querySelectorAll(".exp-item"),
+      document.querySelectorAll(".project-card"),
+      document.querySelectorAll(".edu-row"),
+      document.querySelectorAll(".about-text"),
+    ];
+
+    groups.forEach((group) => {
+      group.forEach((element, i) => {
+        element.classList.add("reveal");
+        element.style.setProperty("--rd", `${i * 0.08}s`);
+      });
+    });
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll(".reveal").forEach((element) =>
+      revealObserver.observe(element)
+    );
+
+    const h2Observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            h2Observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    document.querySelectorAll("main h2").forEach((heading) =>
+      h2Observer.observe(heading)
+    );
+
+    const progressFill = document.getElementById("progressFill");
+
+    const updateProgress = () => {
+      if (!progressFill) return;
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressFill.style.height = `${pct}%`;
+    };
+
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+
+    const hero = document.getElementById("home");
+    const grid = document.getElementById("canvasGrid");
+    const mxVal = document.getElementById("mxVal");
+    const myVal = document.getElementById("myVal");
+
+    const handleMouseMove = (event) => {
+      if (!hero || !grid) return;
+      const rect = hero.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      grid.style.setProperty("--mx", `${x}px`);
+      grid.style.setProperty("--my", `${y}px`);
+      if (mxVal) mxVal.textContent = Math.round(x);
+      if (myVal) myVal.textContent = Math.round(y);
+    };
+
+    hero?.addEventListener("mousemove", handleMouseMove);
+
+    const navToggle = document.getElementById("navToggle");
+    const sidebar = document.getElementById("sidebar");
+
+    const toggleMenu = () => sidebar?.classList.toggle("open");
+    navToggle?.addEventListener("click", toggleMenu);
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => sidebar?.classList.remove("open"));
+    });
+
+    return () => {
+      spyObserver.disconnect();
+      revealObserver.disconnect();
+      h2Observer.disconnect();
+      window.removeEventListener("scroll", updateProgress);
+      hero?.removeEventListener("mousemove", handleMouseMove);
+      navToggle?.removeEventListener("click", toggleMenu);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-tech bg-blobs relative overflow-hidden">
-      <div className="relative z-10">
+    <div className="portfolio">
+      <button className="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        MENU
+      </button>
 
-        {/* HEADER */}
-        <header className="max-w-5xl mx-auto p-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold">
-              RS
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold">R Sanjay</h1>
-              <p className="text-sm text-gray-600">
-                Full Stack Developer | UI/UX & Graphic Design Intern
-              </p>
-            </div>
+      <aside className="sidebar" id="sidebar">
+        <div className="progress-rail">
+          <div className="progress-fill" id="progressFill" />
+        </div>
+
+        <div>
+          <div className="status">
+            <span className="dot" />
+            OPEN TO WORK
           </div>
 
-          <nav className="space-x-4 text-sm">
-            <a href="#projects" className="hover:underline">Projects</a>
-            <a href="#skills" className="hover:underline">Skills</a>
-            <a href="#contact" className="hover:underline">Contact</a>
-          </nav>
-        </header>
+          <div className="brand-mark">Portfolio / 2026</div>
+          <div className="brand-name">R Sanjay</div>
+          <div className="brand-role">UI/UX Designer &amp; Developer</div>
 
-        {/* HERO SECTION */}
-        <section className="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-12 items-center">
+          <ul className="nav-list" id="navList">
+            <li><a href="#home"><span className="idx">00</span>Home</a></li>
+            <li><a href="#about"><span className="idx">01</span>About</a></li>
+            <li><a href="#skills"><span className="idx">02</span>Skills</a></li>
+            <li><a href="#experience"><span className="idx">03</span>Experience</a></li>
+            <li><a href="#projects"><span className="idx">04</span>Projects</a></li>
+            <li><a href="#education"><span className="idx">05</span>Education</a></li>
+            <li><a href="#contact"><span className="idx">06</span>Contact</a></li>
+          </ul>
+        </div>
 
-          {/* LEFT — HERO CARD */}
-          <div>
-            <div className="card p-8 bg-white/95 rounded-[23px] shadow-sm hover:shadow-xl transform hover:-translate-y-2 transition-all duration-200">
-              <h2 className="text-3xl md:text-4xl font-extrabold leading-tight text-[var(--text)]">
-                Hi — I'm R Sanjay.
-              </h2>
+        <div className="sidebar-foot">
+          <a href="https://portfolio-navy-omega-xi0cyl97tj.vercel.app/" target="_blank" rel="noopener noreferrer">Portfolio (old)</a>
+          <a href="https://www.linkedin.com/in/sanjayrameshk/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/Satoshi1705" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="mailto:sanjayramesh883@gmail.com">Email</a>
+        </div>
+      </aside>
 
-              <p className="mt-4 text-gray-700">
-                I build efficient web applications, intuitive user experiences, and automation workflows.
-              </p>
-
-              <p className="mt-3 text-gray-600">
-                I’m a third-year CSE student at SNS College of Technology,
-                specializing in full-stack development, UI/UX design, and automation using modern tools.
-              </p>
-
-              {/* CTA BUTTONS */}
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="#projects"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded-[12px] shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all duration-150"
-                >
-                  View My Projects
-                </a>
-
-                <a
-                  href="/resume.pdf"
-                  className="inline-block px-4 py-2 bg-white text-[var(--text)] border border-gray-200 rounded-[12px] shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all duration-150"
-                >
-                  Download Resume
-                </a>
-
-                <a
-                  href="#contact"
-                  className="inline-block px-4 py-2 bg-[var(--peach)] text-[var(--text)] rounded-[12px] shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all duration-150"
-                >
-                  Let's Connect
-                </a>
-              </div>
-            </div>
+      <main className="main">
+        <section id="home">
+          <div className="canvas-grid" id="canvasGrid" />
+          <div className="inspector" id="inspector">
+            X <span id="mxVal">—</span> · Y <span id="myVal">—</span>
+            <br />
+            ZOOM <span>100%</span> · FRAME <span>Hero</span>
           </div>
 
-          {/* RIGHT — FIXED ROUND PROFILE IMAGE (WhatsApp-style) */}
-          <div className="flex justify-center md:justify-end">
-            <div
-              className="w-80 h-80 rounded-full bg-white shadow-2xl overflow-hidden border-6 border-white transform hover:-translate-y-1 transition-all duration-200"
-              aria-hidden="true"
-            >
-              <img
-                src="/profile.jpg"
-                alt="R Sanjay"
-                className="w-full h-full object-cover"
-                style={{
-                  transform: "translateY(-6%) scale(1.12)",
-                  objectPosition: "50% 38%"
-                }}
-              />
+          <div className="hero-inner">
+            <div className="hero-kicker">Coimbatore, Tamil Nadu, India</div>
+            <h1 id="heroHeading">
+              Designing interfaces people don&apos;t have to think about.
+            </h1>
+            <div className="hero-role">
+              Final-year CSE student building at the intersection of UX research,
+              UI design, and front-end engineering.
             </div>
-          </div>
+            <p className="hero-pitch">
+              I research how people actually use a product, then design and build
+              the interface that gets out of their way, from Figma wireframe to
+              shipped React component.
+            </p>
 
-        </section>
-
-        {/* PROJECTS */}
-        <section id="projects" className="max-w-5xl mx-auto px-6 py-12">
-          <h3 className="text-2xl font-semibold">Projects</h3>
-          <p className="mt-2 text-gray-600">Some of my highlighted work in development and automation.</p>
-
-          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((p) => (
-              <article
-                key={p.id}
-                className="bg-white p-5 rounded-[23px] shadow-sm hover:shadow-xl hover:-translate-y-2 transform transition-all duration-200"
-              >
-                <h4 className="font-semibold text-lg">{p.title}</h4>
-                <p className="text-sm text-gray-600 mt-2">{p.desc}</p>
-
-                <div className="mt-3 flex flex-wrap gap-2 text-xs text-gray-500">
-                  {p.tech.map((t, i) => (
-                    <span key={i} className="px-2 py-1 border rounded">{t}</span>
-                  ))}
-                </div>
-
-                <div className="mt-4">
-                  <a href={p.link} className="text-blue-700 text-sm">View project →</a>
-                </div>
-              </article>
-            ))}
+            <div className="hero-meta">
+              <div><strong>60+</strong>Design screens on a live analytics product</div>
+              <div><strong>04</strong>Design &amp; dev internships</div>
+              <div><strong>8.31</strong>CGPA, CSE, expected 2027</div>
+            </div>
           </div>
         </section>
 
-        {/* SKILLS */}
-        <section id="skills" className="max-w-5xl mx-auto px-6 py-12">
-          <h3 className="text-2xl font-semibold">Skills</h3>
-          <p className="mt-2 text-gray-600">Tools I work with regularly.</p>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            {skills.map((s, i) => (
-              <div
-                key={i}
-                className="px-3 py-2 bg-gray-100 border rounded-[23px] text-sm shadow-sm hover:scale-105 transform transition duration-200"
-              >
-                {s}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CONTACT */}
-        <section id="contact" className="max-w-5xl mx-auto px-6 py-12">
-          <h3 className="text-2xl font-semibold">Contact</h3>
-          <p className="mt-2 text-gray-600">
-            Let’s connect — email or LinkedIn works best.
+        <section id="about">
+          <div className="eyebrow">01 — About</div>
+          <h2>Where research meets the build.</h2>
+          <p className="about-text">
+            I&apos;m a final-year Computer Science and Engineering student working
+            as a UI/UX designer and full-stack developer. My process starts with
+            understanding how people work, through research, flows, and wireframes,
+            and ends with an interface I can build myself, in Figma and in code.
           </p>
+          <p className="about-text">
+            That range shows up in the work: 60+ production screens for a D2C
+            analytics dashboard, branding and campaign design for client-facing
+            brands, and full-stack applications built end to end with React, Node,
+            and MongoDB. I care about consistency, one design system, one voice,
+            used everywhere it needs to be.
+          </p>
+        </section>
 
-          <div className="mt-6 grid md:grid-cols-2 gap-6">
-
-            {/* Left contact box */}
-            <div className="bg-white p-6 rounded-[23px] shadow-sm">
-              <h4 className="font-semibold">Email</h4>
-              <p className="text-sm text-gray-600 mt-2">sanjayramesh883@gmail.com</p>
-
-              <h4 className="font-semibold mt-4">LinkedIn</h4>
-              <p className="text-sm text-gray-600 mt-2">
-                linkedin.com/in/yourprofile
-              </p>
-            </div>
-
-            {/* Message form */}
-            <form className="bg-white p-6 rounded-[23px] shadow-sm">
-              <label className="block text-sm">Your name</label>
-              <input className="w-full mt-1 p-2 border rounded" placeholder="Name" />
-
-              <label className="block text-sm mt-3">Message</label>
-              <textarea
-                className="w-full mt-1 p-2 border rounded h-28"
-                placeholder="Say hi — let's collaborate!"
-              ></textarea>
-
-              <div className="mt-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-[var(--accent)] text-white rounded-[12px] shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all duration-150"
-                >
-                  Send message
-                </button>
+        <section id="skills">
+          <div className="eyebrow">02 — Skills</div>
+          <h2>What I work with.</h2>
+          <div className="skills-grid">
+            {skills.map(([title, description]) => (
+              <div className="skill-card" key={title}>
+                <h3>{title}</h3>
+                <p>{description}</p>
               </div>
-            </form>
-
+            ))}
           </div>
         </section>
 
-        {/* FOOTER */}
-        <footer className="max-w-5xl mx-auto p-6 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} R Sanjay — Built with ❤️
-        </footer>
+        <section id="experience">
+          <div className="eyebrow">03 — Experience</div>
+          <h2>Where I&apos;ve worked.</h2>
 
-      </div>
+          {experience.map((item) => (
+            <div className="exp-item" key={`${item.role}-${item.org}`}>
+              <div className="exp-date">{item.date}</div>
+              <div>
+                <div className="exp-role">{item.role}</div>
+                <div className="exp-org">{item.org}</div>
+                <ul className="exp-list">
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section id="projects">
+          <div className="eyebrow">04 — Projects</div>
+          <h2>Selected work.</h2>
+
+          {projects.map((project) => (
+            <article className="project-card" key={project.title}>
+              <div className="project-top">
+                <div className="project-title">{project.title}</div>
+                <div className="project-tags">{project.tags}</div>
+              </div>
+              <div className="project-desc">{project.desc}</div>
+            </article>
+          ))}
+        </section>
+
+        <section id="education">
+          <div className="eyebrow">05 — Education</div>
+          <h2>Background &amp; recognition.</h2>
+
+          <div className="edu-row">
+            <div>
+              <div className="edu-name">
+                Bachelor of Engineering, Computer Science and Engineering
+              </div>
+              <div className="edu-sub">
+                SNS College of Technology · CGPA 8.31 / 10
+              </div>
+            </div>
+            <div className="edu-date">Expected April 2027</div>
+          </div>
+
+          <ul className="cert-list">
+            {education.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </section>
+
+        <section id="contact">
+          <div className="eyebrow">06 — Contact</div>
+          <div className="contact-big">Let&apos;s build something worth using.</div>
+
+          <div className="contact-links">
+            <a href="mailto:sanjayramesh883@gmail.com">
+              <span className="n">01</span>sanjayramesh883@gmail.com
+            </a>
+            <a href="tel:+919384241373">
+              <span className="n">02</span>+91 93842 41373
+            </a>
+            <a href="https://www.linkedin.com/in/sanjayrameshk/" target="_blank" rel="noopener noreferrer">
+              <span className="n">03</span>linkedin.com/in/sanjayrameshk
+            </a>
+            <a href="https://github.com/Satoshi1705" target="_blank" rel="noopener noreferrer">
+              <span className="n">04</span>github.com/Satoshi1705
+            </a>
+          </div>
+
+          <div className="foot-note">
+            Coimbatore, Tamil Nadu, India — © {new Date().getFullYear()}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
