@@ -256,8 +256,6 @@ export default function Portfolio() {
           <div className="canvas-grid" id="canvasGrid" />
           <div className="inspector" id="inspector">
             X <span id="mxVal">—</span> · Y <span id="myVal">—</span>
-            <br />
-            ZOOM <span>100%</span> · FRAME <span>Hero</span>
           </div>
 
           <div className="hero-inner">
